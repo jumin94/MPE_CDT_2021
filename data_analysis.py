@@ -1,10 +1,3 @@
-
-
-
-
-
-
-
 import pandas as pd
 import glob
 import numpy as np
@@ -47,4 +40,17 @@ def obs_vs_ensmean(data,name):
     plt.scatter(data['obs'],data['ens_mean'],marker='o',color='r')
     plt.title(name)
     plt.xlabel('Observations'); plt.ylabel('Forecast')
+    
+    
+N = 27 #Ensemble members
+def categorization_terciles(df):
+    terciles = df['obs'].quantile([0.33,0.66,0.99]).values
+    categories = np.where(df['obs'] <= terciles[0],1,0)*(-1) + np.where(df['obs'] >= terciles[2],1,0)
+    for i in range(N): 
+        categories = np.where(df.iloc[:,i+2] <= terciles[0],1,0)*(-1) + np.where(df.iloc[:,i+2] >= terciles[2],1,0)
+        df[df.columns[i+2]+'_cat'] = categories
+        
+    return df
+    
+df_cat = categorization_terciles(df)
 
