@@ -52,5 +52,4 @@ def categorization_terciles(df):
         
     return df
     
-df_cat = categorization_terciles(df)
 
